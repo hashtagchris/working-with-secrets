@@ -1,4 +1,4 @@
-name: for loop for each type of secret
+name: node for loops for each type of secret
 on:
   workflow_dispatch:
 
@@ -10,6 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest      
     steps:
+      - run: node --version
+
       - run: |
           node - << EOF >> ./classified-secrets.json
             allSecrets = JSON.parse(process.env.ALL_SECRETS)
