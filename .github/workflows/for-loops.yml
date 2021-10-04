@@ -1,0 +1,32 @@
+name: for loop for each type of secret
+on:
+  workflow_dispatch:
+
+env:
+  CLASSIFIED_SECRETS: "SECRET_1,SECRET_3"
+  TOP_SECRET_SECRETS: "SECRET_2,SECRET_4"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest      
+    steps:
+      - run: echo '[' > ./classified-secrets.json
+      
+      - run: |
+          node - << EOF >> ./classified-secrets.json
+            allSecrets = JSON.parse(process.env.ALL_SECRETS)
+
+            for (secretName of "${{ secrets.CLASSIFIED_SECRETS }}".split(",")) {
+              console.log(JSON.stringify({
+                secret: secretName,
+                classificationLevel: "classified",
+                value: allSecrets[secretName],
+              })
+            }
+          EOF
+        env:
+          ALL_SECRETS: ${{ toJson(secrets) }}
+
+      - run: echo ']' >> ./classified-secrets.json
+      
+      - run: cat ./classified-secrets.json
