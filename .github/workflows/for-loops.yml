@@ -16,7 +16,7 @@ jobs:
           node - << EOF >> ./classified-secrets.json
             allSecrets = JSON.parse(process.env.ALL_SECRETS)
 
-            for (secretName of "${{ secrets.CLASSIFIED_SECRETS }}".split(",")) {
+            for (secretName of "${{ env.CLASSIFIED_SECRETS }}".split(",")) {
               secretInfo = {
                 secret: secretName,
                 classificationLevel: "classified",
