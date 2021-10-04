@@ -15,8 +15,6 @@ jobs:
         with:
           node-version: '14'
 
-      - run: node --version
-
       - run: |
           node - << EOF >> ./classified-secrets.json
             allSecrets = JSON.parse(process.env.ALL_SECRETS)
@@ -40,7 +38,6 @@ jobs:
             }
             
             console.log(JSON.stringify(classifiedSecrets, null, "  "))
-
           EOF
         env:
           ALL_SECRETS: ${{ toJson(secrets) }}
