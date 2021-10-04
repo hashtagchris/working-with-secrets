@@ -10,25 +10,32 @@ jobs:
   build:
     runs-on: ubuntu-latest      
     steps:
-      - run: echo '[' > ./classified-secrets.json
-      
       - run: |
           node - << EOF >> ./classified-secrets.json
             allSecrets = JSON.parse(process.env.ALL_SECRETS)
 
+            classifiedSecrets = []
+
             for (secretName of "${{ env.CLASSIFIED_SECRETS }}".split(",")) {
-              secretInfo = {
+              classifiedSecrets.push({
                 secret: secretName,
                 classificationLevel: "classified",
-                value: allSecrets[secretName]              
-              }
-              
-              console.log(JSON.stringify(secretInfo))
+                value: allSecrets[secretName]
+              })
             }
+
+            for (secretName of "${{ env.TOP_SECRET_SECRETS }}".split(",")) {
+              classifiedSecrets.push({
+                secret: secretName,
+                classificationLevel: "top-secret",
+                value: allSecrets[secretName]
+              })
+            }
+            
+            console.log(JSON.stringify(classifiedSecrets, null, "  "))
+
           EOF
         env:
           ALL_SECRETS: ${{ toJson(secrets) }}
-
-      - run: echo ']' >> ./classified-secrets.json
       
       - run: cat ./classified-secrets.json
