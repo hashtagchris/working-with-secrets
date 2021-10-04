@@ -17,11 +17,13 @@ jobs:
             allSecrets = JSON.parse(process.env.ALL_SECRETS)
 
             for (secretName of "${{ secrets.CLASSIFIED_SECRETS }}".split(",")) {
-              console.log(JSON.stringify({
+              secretInfo = {
                 secret: secretName,
                 classificationLevel: "classified",
-                value: allSecrets[secretName],
-              })
+                value: allSecrets[secretName]              
+              }
+              
+              console.log(JSON.stringify(secretInfo))
             }
           EOF
         env:
