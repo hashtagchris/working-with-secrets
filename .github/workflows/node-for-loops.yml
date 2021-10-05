@@ -16,10 +16,9 @@ jobs:
           node-version: '14'
 
       - run: |
-          node - << EOF >> ./classified-secrets.json
-            allSecrets = JSON.parse(process.env.ALL_SECRETS)
-
-            classifiedSecrets = []
+          node - << EOF > ./classified-secrets.json
+            const allSecrets = JSON.parse(process.env.ALL_SECRETS)
+            const classifiedSecrets = []
 
             for (secretName of "${{ env.CLASSIFIED_SECRETS }}".split(",")) {
               classifiedSecrets.push({
